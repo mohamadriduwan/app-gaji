@@ -289,11 +289,37 @@ class Penggajian extends CI_Controller
     $data['title'] = 'Jabatan';
     $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-    $data['jabatan'] = $this->db->get_where('jabatan_guru', ['id_pegawai' => $id])->result_array();
+    $data['jabatan'] = $this->gajimodel->getDataJabatan($id);
+    $data['datajabatan'] = $this->db->get('data_jabatan')->result_array();
+
+    $data['jtm'] = $this->db->get_where('data_jtm', ['id_guru' => $id])->row_array();
+    $data['guru'] = $this->db->get_where('data_guru', ['kode' => $id])->row_array();
+
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
     $this->load->view('templates/topbar', $data);
     $this->load->view('honor/jabatan', $data);
     $this->load->view('templates/footer');
+  }
+
+  public function tambahJabatan()
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+
+    $data = [
+      'id_pegawai' => $this->input->post('kode'),
+      'id_jabatan' => $this->input->post('jabatan'),
+      'keterangan' => 'Per Bulan'
+    ];
+    $this->db->insert('jabatan_guru', $data);
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Berhasil !</strong> Data JTM berhasil ditambahkan!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>');
+    redirect('penggajian/jabatan/' . $data['id_pegawai']);
   }
 }

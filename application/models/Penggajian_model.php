@@ -11,4 +11,14 @@ class Penggajian_model extends CI_Model
                 ";
         return $this->db->query($query)->result_array();
     }
+
+    public function getDataJabatan($id)
+    {
+        $query = "SELECT `jabatan_guru`.*, `data_jabatan`.*
+                  FROM `jabatan_guru` RIGHT JOIN `data_jabatan`
+                  ON `jabatan_guru`.`id_jabatan` = `data_jabatan`.`id`
+                  WHERE `jabatan_guru`.`id_pegawai` = $id
+                ";
+        return $this->db->query($query)->result_array();
+    }
 }
