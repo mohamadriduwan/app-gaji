@@ -41,17 +41,45 @@
                     </thead>
                     <tbody>
                         <?php $no = 1 ?>
-                        <?php foreach ($guru as $g) : ?>
+                        <?php foreach ($datajtm as $g) : ?>
+                            <?php
+                            $jabatan = $this->gajimodel->getDataJabatan($g['kode']);
+                            ?>
+
                             <tr>
                                 <td><?= $no++; ?></td>
                                 <td><?= $g['kode']; ?></td>
                                 <td><?= $g['nama']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
+                                <td><?= $g['jumlah_jtm']; ?></td>
+                                <td><?= $g['jumlah_jtm'] * $honor_guru['nominal']; ?></td>
+                                <td>
+                                    <?php foreach ($jabatan as $j) : ?>
+                                        <?= $j['nama_jabatan']; ?>,
+                                        <?php $gajian[$g['kode']][] = $j['honor']; ?>
+                                    <?php endforeach; ?>
+                                </td>
+                                <td>
+                                    <?php if (isset($gajian[$g['kode']])) {
+                                        echo array_sum($gajian[$g['kode']]);
+                                    } else {
+                                    }; ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $tanggal_lahir = new DateTime($g['tmt']);
+                                    $sekarang = new DateTime("today");
+                                    if ($tanggal_lahir > $sekarang) {
+                                        $thn = "0";
+                                        $bln = "0";
+                                        $tgl = "0";
+                                    }
+                                    $thn = $sekarang->diff($tanggal_lahir)->y;
+                                    $bln = $sekarang->diff($tanggal_lahir)->m;
+                                    $tgl = $sekarang->diff($tanggal_lahir)->d;
+                                    echo $thn . " tahun " . $bln . " bulan " . $tgl . " hari";
+                                    ?>
+                                </td>
+                                <td><?= $thn * $honor_pengabdian['nominal']; ?></td>
                                 <td><?= $g['tmt']; ?></td>
                                 <td><?= $g['tmt']; ?></td>
                                 <td><?= $g['tmt']; ?></td>

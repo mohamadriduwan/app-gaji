@@ -274,6 +274,11 @@ class Penggajian extends CI_Controller
     $data['title'] = 'Laporan';
     $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
+    $data['datajtm'] = $this->gajimodel->getDatJTM();
+    $data['honor_guru'] = $this->db->get_where('honor_dynamis', ['id' => 1])->row_array();
+    $data['honor_transport'] = $this->db->get_where('honor_dynamis', ['id' => 2])->row_array();
+    $data['honor_pengabdian'] = $this->db->get_where('honor_dynamis', ['id' => 2])->row_array();
+
     $data['guru'] = $this->db->get('data_guru')->result_array();
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
@@ -283,6 +288,10 @@ class Penggajian extends CI_Controller
   }
 
   // Akhir Laporan
+
+
+
+
 
   public function jabatan($id)
   {
