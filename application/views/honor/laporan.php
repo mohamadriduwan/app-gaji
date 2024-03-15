@@ -51,7 +51,8 @@
                                 <td><?= $g['kode']; ?></td>
                                 <td><?= $g['nama']; ?></td>
                                 <td><?= $g['jumlah_jtm']; ?></td>
-                                <td><?= $g['jumlah_jtm'] * $honor_guru['nominal']; ?></td>
+                                <td><?php $hrguru = $g['jumlah_jtm'] * $honor_guru['nominal'];
+                                    echo $hrguru; ?></td>
                                 <td>
                                     <?php foreach ($jabatan as $j) : ?>
                                         <?= $j['nama_jabatan']; ?>,
@@ -60,9 +61,11 @@
                                 </td>
                                 <td>
                                     <?php if (isset($gajian[$g['kode']])) {
-                                        echo array_sum($gajian[$g['kode']]);
+                                        $hrjabatan = array_sum($gajian[$g['kode']]);
                                     } else {
-                                    }; ?>
+                                        $hrjabatan = 0;
+                                    };
+                                    echo $hrjabatan; ?>
                                 </td>
                                 <td>
                                     <?php
@@ -79,10 +82,14 @@
                                     echo $thn . " tahun " . $bln . " bulan " . $tgl . " hari";
                                     ?>
                                 </td>
-                                <td><?= $thn * $honor_pengabdian['nominal']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
-                                <td><?= $g['tmt']; ?></td>
+                                <td><?php $hrpengabdian = $thn * $honor_pengabdian['nominal'];
+                                    echo $hrpengabdian; ?></td>
+                                <td><?= 12 ?></td>
+                                <td><?php $hrtransport = 12 * $honor_transport['nominal'];
+                                    echo $hrtransport; ?></td>
+                                <td><?php $hrtotal = $hrguru + $hrjabatan + $hrpengabdian + $hrtransport;
+                                    echo $hrtotal;
+                                    ?></td>
                                 <td><?= $g['tmt']; ?></td>
                             </tr>
                         <?php endforeach; ?>
