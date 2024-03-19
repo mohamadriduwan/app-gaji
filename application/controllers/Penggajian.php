@@ -290,7 +290,32 @@ class Penggajian extends CI_Controller
   // Akhir Laporan
 
 
+  //Absensi
+  public function absensi()
+  {
+    $data['title'] = "Absensi";
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
+    if ((isset($_GET['bulan']) && $_GET['bulan'] != '') && (isset($_GET['tahun']) && $_GET['tahun'] != '')) {
+      $bulan = $_GET['bulan'];
+      $tahun = $_GET['tahun'];
+      $bulantahun = $bulan . $tahun;
+    } else {
+      $bulan = date('m');
+      $tahun = date('Y');
+      $bulantahun = $bulan . $tahun;
+    }
+    $data['gaji'] = $this->db->query("SELECT SUBSTRING_INDEX(tanggal, ' ', -2) as bulantahun FROM data_absensi")->result_array();
+    // WHERE tanggal='$bulantahun'
+    // ORDER BY data_pegawai.nama_pegawai ASC")->result();
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('honor/absensi', $data);
+    $this->load->view('templates/footer');
+  }
+  //Akhir Absensi
 
 
   public function jabatan($id)
