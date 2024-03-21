@@ -305,7 +305,24 @@ class Penggajian extends CI_Controller
       $tahun = date('Y');
       $bulantahun = $bulan . $tahun;
     }
-    $data['gaji'] = $this->db->query("SELECT SUBSTRING_INDEX(tanggal, ' ', -2) as bulantahun FROM data_absensi")->result_array();
+    $data['bulanlaporan'] = [
+      '01' => 'Januari',
+      '02' => 'Pebruari',
+      '03' => 'Maret',
+      '04' => 'April',
+      '05' => 'Mei',
+      '06' => 'Juni',
+      '07' => 'Juli',
+      '08' => 'Agustus',
+      '09' => 'September',
+      '10' => 'Oktober',
+      '11' => 'November',
+      '12' => 'Desember'
+    ];
+
+    $data['gaji'] = $this->db->query("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',1) as bulan, SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',-1) as tahun, kode, nama, jam_masuk, jam_pulang FROM data_absensi")->result_array();
+
+
     // WHERE tanggal='$bulantahun'
     // ORDER BY data_pegawai.nama_pegawai ASC")->result();
 

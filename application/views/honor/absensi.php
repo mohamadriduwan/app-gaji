@@ -79,16 +79,20 @@ if ((isset($_GET['bulan']) && $_GET['bulan'] != '') && (isset($_GET['tahun']) &&
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($gaji as $g) : ?>
-                            <tr>
-                                <td class="text-center">No</td>
-                                <td class="text-center">KODE</td>
-                                <td class="text-center"><?= $g['bulantahun']; ?></td>
-                                <td class="text-center">JUMLAH MASUK</td>
-                                <td class="text-center">JUMLAH PULANG</td>
-                                <td class="text-center">KEHADIRAN</td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <?php $no = 1;
+                        foreach ($gaji as $g) :
+                            if ($g['bulan'] . $g['tahun'] == $bulanlaporan[$bulan] . $tahun and $g['kode'] == "72") : ?>
+                                <tr>
+                                    <td class="text-center"><?= $no++; ?></td>
+                                    <td class="text-center"><?= $g['kode']; ?></td>
+                                    <td class="text-left"><?= $g['nama']; ?></td>
+                                    <td class="text-center"><?= $g['jam_masuk']; ?></td>
+                                    <td class="text-center"><?= $g['jam_pulang']; ?></td>
+                                    <td class="text-center">KEHADIRAN</td>
+                                </tr>
+                        <?php
+                            endif;
+                        endforeach; ?>
                     </tbody>
                 </table>
             </div>
