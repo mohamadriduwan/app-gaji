@@ -63,7 +63,7 @@ if ((isset($_GET['bulan']) && $_GET['bulan'] != '') && (isset($_GET['tahun']) &&
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header bg-primary text-white">
-            Menampilkan Data Kehadiran Pegawai Bulan: <span class="font-weight-bold"><?php echo $bulan ?></span> Tahun: <span class="font-weight-bold"><?php echo $tahun ?></span>
+            Menampilkan Data Kehadiran Pegawai Bulan: <span class="font-weight-bold"><?php echo $bulanlaporan[$bulan]; ?></span> Tahun: <span class="font-weight-bold"><?php echo $tahun ?></span>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -79,30 +79,56 @@ if ((isset($_GET['bulan']) && $_GET['bulan'] != '') && (isset($_GET['tahun']) &&
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $no = 1;
-                        foreach ($gaji as $g) :
-                            if ($g['bulan'] . $g['tahun'] == $bulanlaporan[$bulan] . $tahun and $g['kode'] == "72") : ?>
+                        <?php foreach ($gaji as $g) :
+                            if ($g['bulan'] . $g['tahun'] == $bulanlaporan[$bulan] . $tahun) : ?>
+                                <?php $jumlahhadir[] = $g['kode']; ?>
+                        <?php
+                            endif;
+                        endforeach; ?>
+                        <?php foreach ($gaji as $g) :
+                            if ($g['bulan'] . $g['tahun'] == $bulanlaporan[$bulan] . $tahun && $g['jam_pulang'] !== "05:00:00 PM") : ?>
+                                <?php $jumlahpulang[] = $g['kode']; ?>
+                        <?php
+                            endif;
+                        endforeach; ?>
+                        <?php if (isset($jumlahhadir)) : ?>
+                            <?php
+                            $datahadir = array_count_values($jumlahhadir);
+                            $datapulang = array_count_values($jumlahpulang);
+                            ?>
+                            <?php $no = 1;
+                            foreach ($guru as $g) : ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $g['kode']; ?></td>
                                     <td class="text-left"><?= $g['nama']; ?></td>
-                                    <td class="text-center"><?= $g['jam_masuk']; ?></td>
-                                    <td class="text-center"><?= $g['jam_pulang']; ?></td>
-                                    <td class="text-center">KEHADIRAN</td>
+                                    <td class="text-center"><?php
+                                                            if (isset($datahadir[$g['kode']])) {
+                                                                $datahadirkode = $datahadir[$g['kode']];
+                                                            } else {
+                                                                $datahadirkode  = 0;
+                                                            };
+                                                            echo $datahadirkode; ?></td>
+                                    <td class="text-center"><?php
+                                                            if (isset($datapulang[$g['kode']])) {
+                                                                $datapulangkode = $datapulang[$g['kode']];
+                                                            } else {
+                                                                $datapulangkode = 0;
+                                                            };
+                                                            echo $datapulangkode; ?></td>
+                                    <td class="text-center"><?= $datapulangkode; ?></td>
                                 </tr>
-                        <?php
-                            endif;
-                        endforeach; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-
-    <span class="badge badge-danger"><i class="fas fa-info-circle"></i> Data masih kosong, silakan input data kehadiran pada bulan dan tahun yang anda pilih</span>
-
-
+    <?php if (!isset($jumlahpulang)) : ?>
+        <span class="badge badge-danger"><i class="fas fa-info-circle"></i> Data masih kosong, silakan input data kehadiran pada bulan dan tahun yang anda pilih</span>
+    <?php endif; ?>
 
 
 </div>

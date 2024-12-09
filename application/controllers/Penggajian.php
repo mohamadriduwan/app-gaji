@@ -274,6 +274,21 @@ class Penggajian extends CI_Controller
     $data['title'] = 'Laporan';
     $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
+    $data['bulanlaporan'] = [
+      '01' => 'Januari',
+      '02' => 'Pebruari',
+      '03' => 'Maret',
+      '04' => 'April',
+      '05' => 'Mei',
+      '06' => 'Juni',
+      '07' => 'Juli',
+      '08' => 'Agustus',
+      '09' => 'September',
+      '10' => 'Oktober',
+      '11' => 'November',
+      '12' => 'Desember'
+    ];
+    $data['kehadiran'] = $this->db->query("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',1) as bulan, SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',-1) as tahun, kode, nama, jam_masuk, jam_pulang FROM data_absensi")->result_array();
     $data['datajtm'] = $this->gajimodel->getDatJTM();
     $data['honor_guru'] = $this->db->get_where('honor_dynamis', ['id' => 1])->row_array();
     $data['honor_transport'] = $this->db->get_where('honor_dynamis', ['id' => 2])->row_array();
@@ -321,8 +336,7 @@ class Penggajian extends CI_Controller
     ];
 
     $data['gaji'] = $this->db->query("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',1) as bulan, SUBSTRING_INDEX(SUBSTRING_INDEX(tanggal, ' ', -2),' ',-1) as tahun, kode, nama, jam_masuk, jam_pulang FROM data_absensi")->result_array();
-
-
+    $data['guru'] = $this->db->get('data_guru')->result_array();
     // WHERE tanggal='$bulantahun'
     // ORDER BY data_pegawai.nama_pegawai ASC")->result();
 
